@@ -103,3 +103,13 @@
 .MultipleDatesCalendar\.CalendarInputControl #submit-button:hover {
     background-color: #4cae4c;
 }
+
+.MultipleDatesCalendar\.CalendarInputControl .calendar-date.selected {
+    background-color: #4CAF50; /* or another color to indicate selection */
+    color: #fff;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+.MultipleDatesCalendar\.CalendarInputControl * {
+    user-select: none;
+}
