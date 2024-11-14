@@ -8,11 +8,29 @@ export class VisualCalendar {
     private dateElements: Map<string, HTMLElement> = new Map(); 
     private selectedDateKeys: Set<string> = new Set();
     private selectionMode: 'add' | 'remove' = 'add';
+    private defaultDate: Date | null = null;
 
-    constructor() {
+    constructor(defaultDate?: Date) {
         this.container = document.createElement("div");
         this.container.className = "calendar-container";
+        this.defaultDate = defaultDate ? this.resetTime(defaultDate) : null;
         this.buildCalendar();
+        if (this.defaultDate) {
+            this.addDefaultDate();
+        }
+    }
+
+    private addDefaultDate(): void {
+        if (this.defaultDate) {
+            const dateKey = this.getDateKey(this.defaultDate);
+            this.selectedDateKeys.clear(); 
+            this.selectedDateKeys.add(dateKey); 
+        }
+    }
+
+    public setDefaultDate(date: Date): void {
+        this.defaultDate = this.resetTime(date);
+        this.addDefaultDate();
     }
 
     private buildCalendar() {
@@ -146,7 +164,7 @@ export class VisualCalendar {
 
         const [start, end] = this.startDate <= this.endDate ? [this.startDate, this.endDate] : [this.endDate, this.startDate];
 
-        let currentDate = new Date(start);
+        const currentDate = new Date(start);
         while (currentDate <= end) {
             const dateKey = this.getDateKey(currentDate);
             const dateElement = this.dateElements.get(dateKey);

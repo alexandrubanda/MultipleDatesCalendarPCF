@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="MultipleDatesCalendar" constructor="CalendarInputControl" version="0.0.1" display-name-key="CalendarInputControl" description-key="CalendarInputControl description" control-type="standard">
+  <control namespace="MultipleDatesCalendar" constructor="CalendarInputControl" version="0.0.2" display-name-key="CalendarInputControl" description-key="CalendarInputControl description" control-type="standard">
     
     <external-service-usage enabled="false">
     </external-service-usage>
@@ -9,7 +9,7 @@
     <property name="defaultDate" display-name-key="Default_Date" description-key="Default date for the calendar" of-type="DateAndTime.DateOnly" usage="input" required="false" />
 
     <!-- Property to return a selected range of dates -->
-    <property name="dateRange" display-name-key="Date_Range" description-key="Selected range of dates" of-type="SingleLine.Text" usage="bound" required="true" />
+    <property name="dateRange" display-name-key="Date_Range" description-key="Selected range of dates" of-type="SingleLine.Text" usage="output" required="false" />
 
     <resources>
       <code path="index.ts" order="1"/>
