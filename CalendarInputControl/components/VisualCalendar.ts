@@ -10,7 +10,7 @@ export class VisualCalendar {
     private selectionMode: 'add' | 'remove' = 'add';
     private defaultDate: Date | null = null;
 
-    constructor(defaultDate?: Date) {
+    constructor(defaultDate?: Date | null) {
         this.container = document.createElement("div");
         this.container.className = "calendar-container";
         this.defaultDate = defaultDate ? this.resetTime(defaultDate) : null;
@@ -77,7 +77,6 @@ export class VisualCalendar {
         clearButton.className = "calendar-button";
         clearButton.id = "clear-button";
         clearButton.innerText = "Clear";
-        clearButton.addEventListener("click", () => this.clearSelection());
 
         const submitButton = document.createElement("button");
         submitButton.className = "calendar-button";
@@ -107,9 +106,37 @@ export class VisualCalendar {
         }
     }
 
-    public renderDates(dates: Date[]): void {
+    /**
+     * Render all 42 (or so) dates in the grid, but visually disable any out-of-range days
+     */
+    public renderDates(
+        dates: Date[],
+        today: Date,
+        limitMonths: boolean,
+        allowPast: boolean,
+        numberOfAllowedMonths: number
+    ): void {
         this.calendarGrid.innerHTML = "";
         this.dateElements.clear();
+
+        // Compute the "allowed" range if limitMonths is true
+        const todayMonthIndex = today.getFullYear() * 12 + today.getMonth();
+        const pastOffset = allowPast ? numberOfAllowedMonths : 0;
+        const minMonthIndex = todayMonthIndex - pastOffset;
+        const maxMonthIndex = todayMonthIndex + numberOfAllowedMonths;
+
+        // Convert those indexes to actual date boundaries
+        const minDate = new Date(
+            Math.floor(minMonthIndex / 12),
+            (minMonthIndex % 12),
+            1
+        );
+        const maxDateTemp = new Date(
+            Math.floor(maxMonthIndex / 12),
+            (maxMonthIndex % 12) + 1,
+            0
+        );
+        const maxDate = maxDateTemp;
 
         dates.forEach(date => {
             const dateElement = document.createElement("div");
@@ -119,18 +146,28 @@ export class VisualCalendar {
             const dateKey = this.getDateKey(date);
             this.dateElements.set(dateKey, dateElement);
 
-         
-            if (this.selectedDateKeys.has(dateKey)) {
-                dateElement.classList.add("selected");
-            }
+            // Check if this date is out of range
+            const isBeforeToday = date < today && !allowPast;
+            const isTooEarly = limitMonths && date < minDate;
+            const isTooLate = limitMonths && date > maxDate;
 
-            dateElement.addEventListener("mousedown", () => this.startSelection(date));
-            dateElement.addEventListener("mouseenter", () => this.updateSelection(date));
-            dateElement.addEventListener("mouseup", () => this.endSelection());
+            // If date is out of range, disable
+            if (isBeforeToday || isTooEarly || isTooLate) {
+                dateElement.classList.add("disabled");
+            } else {
+                // Otherwise allow selection
+                if (this.selectedDateKeys.has(dateKey)) {
+                    dateElement.classList.add("selected");
+                }
+                dateElement.addEventListener("mousedown", () => this.startSelection(date));
+                dateElement.addEventListener("mouseenter", () => this.updateSelection(date));
+                dateElement.addEventListener("mouseup", () => this.endSelection());
+            }
 
             this.calendarGrid.appendChild(dateElement);
         });
 
+        // Ensure mouseup is captured to stop dragging
         document.addEventListener("mouseup", () => this.endSelection());
     }
 
@@ -162,7 +199,9 @@ export class VisualCalendar {
     private applySelection(): void {
         if (!this.startDate || !this.endDate) return;
 
-        const [start, end] = this.startDate <= this.endDate ? [this.startDate, this.endDate] : [this.endDate, this.startDate];
+        const [start, end] = this.startDate <= this.endDate
+            ? [this.startDate, this.endDate]
+            : [this.endDate, this.startDate];
 
         const currentDate = new Date(start);
         while (currentDate <= end) {

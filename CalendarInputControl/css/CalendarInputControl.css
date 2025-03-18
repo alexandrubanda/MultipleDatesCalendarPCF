@@ -138,3 +138,7 @@
     user-select: none;
 }
 
+.MultipleDatesCalendar\.CalendarInputControl .calendar-date.disabled {
+    opacity: 0.3;        
+    pointer-events: none;    
+  }

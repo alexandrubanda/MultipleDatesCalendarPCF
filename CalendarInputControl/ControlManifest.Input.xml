@@ -2,21 +2,49 @@
 <manifest>
   <control namespace="MultipleDatesCalendar" constructor="CalendarInputControl" version="0.0.2" display-name-key="CalendarInputControl" description-key="CalendarInputControl description" control-type="standard">
     
-    <external-service-usage enabled="false">
-    </external-service-usage>
-
+    <external-service-usage enabled="false" />
+    
     <!-- Property to take a default date from the user (optional) -->
-    <property name="defaultDate" display-name-key="Default_Date" description-key="Default date for the calendar" of-type="DateAndTime.DateOnly" usage="input" required="false" />
-
+    <property name="defaultDate"
+              display-name-key="Default_Date"
+              description-key="Default date for the calendar"
+              of-type="DateAndTime.DateOnly"
+              usage="input"
+              required="false" />
+    
     <!-- Property to return a selected range of dates -->
-    <property name="dateRange" display-name-key="Date_Range" description-key="Selected range of dates" of-type="SingleLine.Text" usage="output" required="false" />
-
+    <property name="dateRange"
+              display-name-key="Date_Range"
+              description-key="Selected range of dates"
+              of-type="SingleLine.Text"
+              usage="output"
+              required="false" />
+    
+    <!-- New properties -->
+    <property name="limitMonths"
+              display-name-key="Limit_Months"
+              description-key="Limit how many months are navigable"
+              of-type="TwoOptions"
+              usage="input"
+              required="false" />
+    
+    <property name="allowPast"
+              display-name-key="Allow_Past"
+              description-key="If false, do not show any past dates"
+              of-type="TwoOptions"
+              usage="input"
+              required="false" />
+    
+    <property name="numberOfAllowedMonths"
+              display-name-key="Number_Of_Allowed_Months"
+              description-key="Number of months from current month you can navigate"
+              of-type="Whole.None"
+              usage="input"
+              required="false" />
+    
     <resources>
       <code path="index.ts" order="1"/>
-      <!-- Uncomment and add any additional resources if needed -->
       <css path="css/CalendarInputControl.css" order="1" />
-      <!-- <resx path="strings/CalendarInputControl.1033.resx" version="1.0.0" /> -->
     </resources>
-    
   </control>
 </manifest>
