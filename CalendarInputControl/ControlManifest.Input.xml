@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="MultipleDatesCalendar" constructor="CalendarInputControl" version="0.0.2" display-name-key="CalendarInputControl" description-key="CalendarInputControl description" control-type="standard">
+  <control namespace="MultipleDatesCalendar" constructor="CalendarInputControl" version="0.0.3" display-name-key="CalendarInputControl" description-key="CalendarInputControl description" control-type="standard">
     
     <external-service-usage enabled="false" />
     
